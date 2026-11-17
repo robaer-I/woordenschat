@@ -170,7 +170,7 @@ function renderLang(first) {
           <label><span class="label">${esc(l.name)}</span><input type="text" id="qf" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next" placeholder="Typ een ${esc(l.name.toLowerCase())} woord"></label>
           <label><span class="label">Nederlands</span><input type="text" id="qd" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="of het Nederlandse woord"></label>
         </div>
-        <div class="status" id="status" aria-live="polite"></div>
+        <div class="statusrow"><div class="status" id="status" aria-live="polite"></div><button id="clearBtn" class="clear" hidden>✕ Wissen</button></div>
       </div>
       <div class="count" id="count"></div>
       <div class="head"><button id="sortF">${esc(l.name)}</button><button id="sortD">Nederlands</button></div>
@@ -193,6 +193,10 @@ function renderLang(first) {
       qf = qfEl.value; qd = qdEl.value; hi = -1; editId = null; shown = PAGE; drawList();
     };
     qfEl.oninput = qdEl.oninput = onInput;
+    document.getElementById('clearBtn').onclick = () => {
+      qf = qd = ''; qfEl.value = ''; qdEl.value = ''; hi = -1; editId = null; shown = PAGE;
+      drawList(); qfEl.focus();
+    };
     qfEl.onkeydown = qdEl.onkeydown = onKey;
     if (first && matchMedia('(pointer:fine)').matches) setTimeout(() => qfEl.focus(), 0);
   }
@@ -203,6 +207,7 @@ function drawList() {
   const l = langOf(cur); if (!l) return;
   const list = filtered(), ex = exactMatches(), exIds = new Set(ex.map(w => w.id));
   const st = document.getElementById('status'), all = wordsOf(cur).length, f = qf.trim(), d = qd.trim();
+  document.getElementById('clearBtn').hidden = !(qf || qd);
   document.getElementById('sortF').className = sortBy === 'f' ? 'on' : '';
   document.getElementById('sortD').className = sortBy === 'd' ? 'on' : '';
   st.className = 'status';

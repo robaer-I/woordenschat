@@ -1,6 +1,6 @@
 // Bewaart de app op de telefoon zodat hij zonder internet werkt.
 // Verhoog VERSION bij elke wijziging aan de app-bestanden.
-const VERSION = 'ws-v1';
+const VERSION = 'ws-v2';
 const FILES = ['./', 'index.html', 'app.js', 'jspdf.umd.min.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

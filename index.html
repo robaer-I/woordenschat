@@ -61,6 +61,9 @@ input[type=text]:focus{border-color:var(--lang);outline:none}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fields label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:44px;margin-top:6px;color:var(--muted);font-size:15px}
+.statusrow{display:flex;align-items:flex-start;gap:8px}
+.statusrow .status{flex:1 1 auto;min-width:0}
+button.clear{flex:none;margin-top:6px;padding:8px 12px;min-height:44px;color:var(--muted)}
 .status.exists{color:var(--ok)} .status.new{color:var(--fg)}
 .pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--ok-bg);color:var(--ok)}
 .head{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 12px}
