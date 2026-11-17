@@ -2,7 +2,7 @@
 /* Mijn Woordenschat — offline telefoon-app. Alle gegevens staan in IndexedDB op het toestel. */
 
 // Versienummer rechtsboven. Verhoog dit bij elke nieuwe versie, samen met VERSION in sw.js.
-const APP_VERSION = 3;
+const APP_VERSION = 4;
 const HUES = ['#d9480f', '#2b8a3e', '#1c7ed6', '#ae3ec9', '#e8590c', '#0c8599', '#c2255c', '#5f3dc4'];
 const PAGE = 300;
 const REPL = String.fromCharCode(0xFFFD);
@@ -504,7 +504,9 @@ document.body.appendChild(verEl);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(reg => {
+    navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).then(reg => {
+      // Bij terugkeren naar de app (die vaak niet echt herstart) toch op updates controleren
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         if (!nw || !navigator.serviceWorker.controller) return; // eerste installatie
