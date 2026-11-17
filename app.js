@@ -1,6 +1,8 @@
 'use strict';
 /* Mijn Woordenschat — offline telefoon-app. Alle gegevens staan in IndexedDB op het toestel. */
 
+// Versienummer rechtsboven. Verhoog dit bij elke nieuwe versie, samen met VERSION in sw.js.
+const APP_VERSION = 3;
 const HUES = ['#d9480f', '#2b8a3e', '#1c7ed6', '#ae3ec9', '#e8590c', '#0c8599', '#c2255c', '#5f3dc4'];
 const PAGE = 300;
 const REPL = String.fromCharCode(0xFFFD);
@@ -495,6 +497,24 @@ function restoreDialog() {
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch {}
 })();
 
+/* ---------- versie ---------- */
+const verEl = document.createElement('div');
+verEl.className = 'ver'; verEl.textContent = 'versie ' + APP_VERSION;
+document.body.appendChild(verEl);
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw || !navigator.serviceWorker.controller) return; // eerste installatie
+        nw.addEventListener('statechange', () => {
+          if (nw.state !== 'activated') return;
+          verEl.innerHTML = 'Nieuwe versie klaar <button>Vernieuwen</button>';
+          verEl.classList.add('new');
+          verEl.querySelector('button').onclick = () => location.reload();
+        });
+      });
+    }).catch(() => {});
+  });
 }
